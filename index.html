@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanga - AI Property Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #e5e7eb;
+            background-color: #111827;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 50%, #000000 100%);
+            border-bottom: 4px solid #f97316;
+            padding: 80px 24px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 50px;
+            padding: 8px 24px;
+            margin-bottom: 24px;
+        }
+
+        .badge span {
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+            background: linear-gradient(to right, #22c55e, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #d1d5db;
+            margin-bottom: 32px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, #22c55e, #16a34a);
+            color: white;
+            font-weight: 700;
+            padding: 16px 40px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(34, 197, 94, 0.4);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 80px 24px;
+        }
+
+        .section-dark {
+            background-color: rgba(31, 41, 55, 0.5);
+        }
+
+        .section-darker {
+            background-color: #111827;
+        }
+
+        .section-gradient {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(249, 115, 22, 0.1) 100%);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .section-header p {
+            font-size: 1.25rem;
+            color: #d1d5db;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Screenshot Section */
+        .screenshot-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .tab-btn {
+            padding: 12px 32px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: #374151;
+            color: #d1d5db;
+        }
+
+        .tab-btn:hover {
+            background-color: #4b5563;
+        }
+
+        .tab-btn.active-green {
+            background-color: #22c55e;
+            color: white;
+        }
+
+        .tab-btn.active-orange {
+            background-color: #f97316;
+            color: white;
+        }
+
+        .screenshot-container {
+            background-color: #1f2937;
+            border-radius: 16px;
+            padding: 32px;
+            border: 2px solid #374151;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .screenshot-placeholder {
+            aspect-ratio: 16 / 9;
+            background-color: #374151;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .screenshot-placeholder .icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+
+        .screenshot-placeholder .title {
+            color: #9ca3af;
+            font-size: 1.125rem;
+            margin-bottom: 8px;
+        }
+
+        .screenshot-placeholder .subtitle {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .screenshot-content {
+            display: none;
+        }
+
+        .screenshot-content.active {
+            display: block;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-card {
+            background-color: #1f2937;
+            padding: 32px;
+            border-radius: 12px;
+            border: 2px solid #374151;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: #4b5563;
+            transform: translateY(-8px);
+        }
+
+        .feature-card .icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        .feature-card.green .icon {
+            color: #22c55e;
+        }
+
+        .feature-card.orange .icon {
+            color: #f97316;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: white;
+        }
+
+        .feature-card p {
+            color: #d1d5db;
+            line-height: 1.8;
+        }
+
+        /* Steps Grid */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .step-number.green {
+            background-color: #22c55e;
+        }
+
+        .step-number.orange {
+            background-color: #f97316;
+        }
+
+        .step h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: white;
+        }
+
+        .step p {
+            color: #d1d5db;
+        }
+
+        /* Benefits Grid */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 32px;
+        }
+
+        .benefit-item {
+            display: flex;
+            gap: 24px;
+            background: rgba(31, 41, 55, 0.5);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #374151;
+        }
+
+        .benefit-item .icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+
+        .benefit-item h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .benefit-item p {
+            color: #d1d5db;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(to right, #22c55e, #f97316);
+            text-align: center;
+            padding: 80px 24px;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: white;
+        }
+
+        .cta-section p {
+            font-size: 1.25rem;
+            margin-bottom: 32px;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #111827;
+            font-weight: 700;
+            padding: 16px 40px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #030712;
+            padding: 32px 24px;
+            text-align: center;
+            border-top: 1px solid #1f2937;
+        }
+
+        footer p {
+            color: #6b7280;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .features-grid,
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .screenshot-tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <div class="badge">
+                <span>Powered by Thanga</span>
+            </div>
+            <h1>Never Miss a Property Lead Again</h1>
+            <p>AI-powered WhatsApp assistant that responds instantly to inquiries, schedules viewings, and converts prospects 24/7</p>
+            <button class="btn-primary">Get Started Today</button>
+        </div>
+    </header>
+
+    <!-- Problem Section -->
+    <section class="section-dark">
+        <div class="container">
+            <div class="section-header">
+                <h2>The Problem Every Agent Faces</h2>
+                <p>Buyer and renter interviews reveal the #1 frustration: agents not responding quickly enough to inquiries. Every delayed response is a lost opportunity.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshot Section -->
+    <section class="section-darker">
+        <div class="container">
+            <div class="section-header">
+                <h2>See Thanga in Action</h2>
+                <p>Watch how our AI assistant handles real conversations</p>
+            </div>
+            
+            <div class="screenshot-tabs">
+                <button class="tab-btn active-green" onclick="switchTab('bot')">WhatsApp Bot</button>
+                <button class="tab-btn" onclick="switchTab('backend')">Backend Dashboard</button>
+            </div>
+
+            <div class="screenshot-container">
+                <div id="bot-screenshot" class="screenshot-content active">
+                    <div class="screenshot-placeholder">
+                        <div class="icon">💬</div>
+                        <div class="title">WhatsApp Bot Screenshot</div>
+                        <div class="subtitle">Screenshot of AI chatbot conversation goes here</div>
+                    </div>
+                </div>
+                <div id="backend-screenshot" class="screenshot-content">
+                    <div class="screenshot-placeholder">
+                        <div class="icon">📊</div>
+                        <div class="title">Backend Dashboard Screenshot</div>
+                        <div class="subtitle">Screenshot of management dashboard goes here</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section-dark">
+        <div class="container">
+            <div class="section-header">
+                <h2>What It Does</h2>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card green">
+                    <div class="icon">⚡</div>
+                    <h3>Instant Response</h3>
+                    <p>Every inquiry gets answered immediately, 24/7. No more missed opportunities because you were in a meeting or asleep.</p>
+                </div>
+                
+                <div class="feature-card orange">
+                    <div class="icon">📅</div>
+                    <h3>Smart Scheduling</h3>
+                    <p>Automatically books viewings, sends reminders to both parties, and manages your calendar seamlessly.</p>
+                </div>
+                
+                <div class="feature-card green">
+                    <div class="icon">🎯</div>
+                    <h3>Qualified Leads</h3>
+                    <p>Captures name, email, and intent immediately. Only serious buyers reach your inbox.</p>
+                </div>
+                
+                <div class="feature-card orange">
+                    <div class="icon">🏠</div>
+                    <h3>Property Management</h3>
+                    <p>Organizes inquiries by listing automatically. Set properties as "In Application," "Sold," or schedule specific viewing times.</p>
+                </div>
+                
+                <div class="feature-card green">
+                    <div class="icon">💼</div>
+                    <h3>Built-In CRM</h3>
+                    <p>Automatically creates CRM entries for every inquiry, building your database for future listings.</p>
+                </div>
+                
+                <div class="feature-card orange">
+                    <div class="icon">👤</div>
+                    <h3>Take Control Anytime</h3>
+                    <p>Jump into any conversation whenever you need to. The AI handles routine questions, you handle the personal touch.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section-darker">
+        <div class="container">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p>Seamlessly integrates with your Property24 listings via WhatsApp</p>
+            </div>
+            
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number green">1</div>
+                    <h3>Buyer Contacts You</h3>
+                    <p>When someone WhatsApps you from Property24, the AI assistant responds instantly</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number orange">2</div>
+                    <h3>Captures Details</h3>
+                    <p>Collects name, email, and asks if they want to schedule a viewing or need more info</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number green">3</div>
+                    <h3>Books & Reminds</h3>
+                    <p>Schedules the viewing and sends automatic reminders to both you and the prospect</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number orange">4</div>
+                    <h3>You Close the Deal</h3>
+                    <p>Show up to pre-qualified viewings with all the information you need</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="section-gradient">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Agents Love It</h2>
+                <p>Built specifically for property professionals who want to convert more leads with less effort</p>
+            </div>
+            
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="icon">✅</div>
+                    <div>
+                        <h4>Zero Missed Opportunities</h4>
+                        <p>Every single inquiry receives a professional response within seconds, even at 2 AM</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="icon">⏰</div>
+                    <div>
+                        <h4>Save Hours Every Week</h4>
+                        <p>Stop playing phone tag and manually scheduling viewings. Focus on closing deals instead</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="icon">📈</div>
+                    <div>
+                        <h4>Higher Conversion Rates</h4>
+                        <p>Serious buyers can book viewings instantly without friction or delays</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="icon">🎨</div>
+                    <div>
+                        <h4>Professional Image</h4>
+                        <p>Provide a premium, modern experience that sets you apart from other agents</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="icon">📊</div>
+                    <div>
+                        <h4>Better Data & Insights</h4>
+                        <p>Track all inquiries, understand demand patterns, and build a valuable contact database</p>
+                    </div>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="icon">🔧</div>
+                    <div>
+                        <h4>Custom Built for You</h4>
+                        <p>Designed specifically for property agents' workflows, not a generic chatbot</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Transform Your Lead Management?</h2>
+            <p>Join forward-thinking agents who are already using AI to close more deals</p>
+            <button class="btn-secondary">Schedule a Demo</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© 2025 Thanga. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function switchTab(tab) {
+            // Hide all screenshot contents
+            document.getElementById('bot-screenshot').classList.remove('active');
+            document.getElementById('backend-screenshot').classList.remove('active');
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active-green', 'active-orange');
+            });
+            
+            // Show selected content and activate button
+            if (tab === 'bot') {
+                document.getElementById('bot-screenshot').classList.add('active');
+                buttons[0].classList.add('active-green');
+            } else {
+                document.getElementById('backend-screenshot').classList.add('active');
+                buttons[1].classList.add('active-orange');
+            }
+        }
+    </script>
+</body>
+</html>
