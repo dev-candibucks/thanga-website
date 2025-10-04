@@ -365,6 +365,138 @@
             color: #6b7280;
         }
 
+        /* Registration Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            border: 2px solid #374151;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            animation: slideUp 0.3s;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
+            color: #9ca3af;
+            cursor: pointer;
+            background: none;
+            border: none;
+            line-height: 1;
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #f97316;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-header h2 {
+            font-size: 2rem;
+            background: linear-gradient(to right, #22c55e, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .modal-header p {
+            color: #9ca3af;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #d1d5db;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: #374151;
+            border: 2px solid #4b5563;
+            border-radius: 8px;
+            color: #e5e7eb;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #22c55e;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(to right, #22c55e, #16a34a);
+            color: white;
+            font-weight: 700;
+            padding: 16px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
@@ -395,7 +527,7 @@
             </div>
             <h1>Never Miss a Property Lead Again</h1>
             <p>AI-powered WhatsApp assistant that responds instantly to inquiries, schedules viewings, and converts prospects 24/7</p>
-            <button class="btn-primary">Get Started Today</button>
+            <button class="btn-primary" onclick="openModal()">Get Started Today</button>
         </div>
     </header>
 
@@ -423,20 +555,12 @@
             </div>
 
             <div class="screenshot-container">
-                <div id="bot-screenshot" class="screenshot-content active">
-                    <div class="screenshot-placeholder">
-                        <div class="icon">💬</div>
-                        <div class="title">WhatsApp Bot Screenshot</div>
-                        <div class="subtitle">Screenshot of AI chatbot conversation goes here</div>
-                    </div>
-                </div>
-                <div id="backend-screenshot" class="screenshot-content">
-                    <div class="screenshot-placeholder">
-                        <div class="icon">📊</div>
-                        <div class="title">Backend Dashboard Screenshot</div>
-                        <div class="subtitle">Screenshot of management dashboard goes here</div>
-                    </div>
-                </div>
+               <div id="bot-screenshot" class="screenshot-content active">
+    <img src="images/bot-screenshot.png" alt="WhatsApp Bot Conversation" style="width: 100%; border-radius: 8px;">
+</div>
+<div id="backend-screenshot" class="screenshot-content">
+    <img src="images/backend-screenshot.png" alt="Backend Dashboard" style="width: 100%; border-radius: 8px;">
+</div>
             </div>
         </div>
     </section>
@@ -589,7 +713,7 @@
         <div class="container">
             <h2>Ready to Transform Your Lead Management?</h2>
             <p>Join forward-thinking agents who are already using AI to close more deals</p>
-            <button class="btn-secondary">Schedule a Demo</button>
+            <button class="btn-secondary" onclick="openModal()">Schedule a Demo</button>
         </div>
     </section>
 
@@ -599,6 +723,64 @@
             <p>© 2025 Thanga. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Registration Modal -->
+    <div id="registrationModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            
+            <div class="modal-header">
+                <h2>Get Started with Thanga</h2>
+                <p>Fill in your details and we'll be in touch</p>
+            </div>
+
+            <form action="https://formsubmit.co/Roy@borole.com" method="POST">
+                
+                <!-- FormSubmit Configuration -->
+                <input type="hidden" name="_subject" value="New Thanga Registration!">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+                
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="company">Company/Agency Name</label>
+                    <input type="text" id="company" name="company">
+                </div>
+
+                <div class="form-group">
+                    <label for="properties">Number of Properties You Manage</label>
+                    <select id="properties" name="properties">
+                        <option value="">Select...</option>
+                        <option value="1-5">1-5 properties</option>
+                        <option value="6-20">6-20 properties</option>
+                        <option value="21-50">21-50 properties</option>
+                        <option value="50+">50+ properties</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">How can Thanga help you? (Optional)</label>
+                    <textarea id="message" name="message" placeholder="Tell us about your needs..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Submit Registration</button>
+            </form>
+        </div>
+    </div>
 
     <script>
         function switchTab(tab) {
@@ -621,6 +803,30 @@
                 buttons[1].classList.add('active-orange');
             }
         }
+
+        // Modal Functions
+        function openModal() {
+            document.getElementById('registrationModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('registrationModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('registrationModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
